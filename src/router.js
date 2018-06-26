@@ -21,6 +21,10 @@ export default function createRouter() {
       {
         path: '/asynchello/:id',
         component: () => import('./components/AsyncHello.vue')
+      },
+      {
+        path: '/item/:id',
+        component: () => import('./components/vuexItem.vue')
       }
     ]
   })
