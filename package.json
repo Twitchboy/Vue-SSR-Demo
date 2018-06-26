@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "server": "node server.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
