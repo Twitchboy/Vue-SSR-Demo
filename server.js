@@ -1,9 +1,22 @@
 const Vue = require('vue')
 const express = require('express')
-const renderer = require('vue-server-renderer').createRenderer({
-  template: require('fs').readFileSync('./src/index.template.html', 'utf-8')
-})
-const createApp = require('./dist/main.server.js').default
+
+const template = require('fs').readFileSync('./src/index.template.html', 'utf-8')
+const serverBundle = require('./dist/vue-ssr-server-bundle.json')
+const clientManifest = require('./dist/vue-ssr-client-manifest.json')
+
+const renderer = require('vue-server-renderer')
+.createBundleRenderer(
+  serverBundle,
+  {
+    runInNewContext: false, // 关闭每次渲染都要重新创建一个上下文，减少性能开销
+    template,
+    clientManifest // 客户端构建的 manifest
+  }
+)
+
+// 使用 BundleRenderer 就不需要自己手动来获取了，通过 clientManifest 注入进来
+// const createApp = require('./dist/main.server.js').default
 
 const server = express();
 
@@ -20,8 +33,8 @@ server.get('*', (req, res) => {
     url: req.url
   }
 
-  createApp(context).then(app => {
-    renderer.renderToString(app, context, (err, html) => {
+  // createApp(context).then(app => {
+    renderer.renderToString(context, (err, html) => {
         if (err) {
           if (err.code === 404) {
             res.status(404).end('Page not found')
@@ -32,7 +45,7 @@ server.get('*', (req, res) => {
           res.end(html)
         }
       })
-  })
+  // })
 })
 
 server.listen(8080, () => {
