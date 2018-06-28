@@ -18,6 +18,7 @@ export function createStore () {
         // `store.dispatch()` 会返回 Promise，
         // 以便我们能够知道数据在何时更新
         return fetchItem(id).then(item => {
+          console.log(item)
           commit('setItem', { id, item })
         })
       }

@@ -12,9 +12,15 @@
 <script>
 import { mapState, mapGetters, createNamespacedHelpers } from 'vuex'
 import fooStoreModule from '../store/modules/foo.js';
+import titleMinxin from '../title-mixin.js'
 
   export default {
     name: 'vuexItem',
+    mixins: [titleMinxin],
+
+    title () {
+      return this.getItem().mixinText
+    },
     // 静态函数, 以便外部可以任意调用
     asyncData ({ store, route }) {
       // 模块动态注册，需要才加载进来
